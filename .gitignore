@@ -1,3 +1,11 @@
 .env
 creds
 migration
+simulation/simulation_sensor
+rpi_constants/__pycache__
+rpi_lib/__pycache__
+rpi_types/__pycache__
+rpi_types/dto/__pycache__
+rpi_lib/data/__pycache__
+rpi_constants/enums/__pycache__
+rpi_constants/simulation/__pycache__
