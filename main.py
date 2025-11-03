@@ -19,6 +19,7 @@ parser.add_argument("-delay", "--delay", type=int, help="The delay in seconds to
 parser.add_argument("-url", "--url", type=str, help="The external URL receiving the temperature data.")
 parser.add_argument("-simulate", "--simulate", action="store_true", help="Use fake temperature data to simulate a raspberry pi, useful for testing externally.")
 parser.add_argument("-simulate_sensor_filename", "--simulate_sensor_filename", type=str, help="The mock temperature sensor filename, defaults to simulation_sensor", nargs="?")
+parser.add_argument("-debug", "--debug", action="store_true", help="Toggles debug logging while the process runs.")
 
 ###############################
 ## PARSING CLI ARGS
@@ -28,16 +29,17 @@ export_delay: int = cmd_line_arguments.delay or 1
 external_url: Optional[str] = cmd_line_arguments.url
 simulate_data: Optional[bool] = cmd_line_arguments.simulate
 simulate_sensor_filename: Optional[str] = cmd_line_arguments.simulate_sensor_filename
+debug: Optional[bool] = cmd_line_arguments.debug
 
 def main():
 
-    [pi_id, does_pi_exist] = check_raspberry_pi_mysql()
+    [pi_id, does_pi_exist] = check_raspberry_pi_mysql(debug)
     while does_pi_exist and pi_id is not None:
-        log_dict = color_log()
+        log_dict = color_log(debug)
         log_dict["info"]("Gathering temperature data.")
-        read_temperature_data = processor(pi_id, simulate_data, simulate_sensor_filename)
+        read_temperature_data = processor(pi_id, simulate_data, simulate_sensor_filename, debug)
         log_dict["info"]("Processed temperature data, propagating processed temperature readings to database.")
-        send_temperature_data(read_temperature_data, send_temperature_mysql)
+        send_temperature_data(read_temperature_data, send_temperature_mysql, debug)
 
         if external_url is not None and len(external_url):
             log_dict["info"](f"Exporting data to external url: {external_url}")

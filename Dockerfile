@@ -1,0 +1,17 @@
+FROM python:3.12-slim
+
+# Set the working directory to the `app` directory.
+WORKDIR /app
+
+# Copy over all the files to the `app` directory.
+COPY . /app
+
+# Install + Update dependencies
+RUN apt-get update && apt-get install -y
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Run the base CLI file.
+CMD ["python", "main.py"]
+

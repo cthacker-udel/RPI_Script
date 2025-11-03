@@ -8,22 +8,23 @@ import os
 from dotenv import load_dotenv
 from mysql.connector import connect
 
-def check_raspberry_pi_mysql(pi_id: Optional[str] = None) -> tuple[Optional[str], bool]:
+def check_raspberry_pi_mysql(debug: Optional[bool] = False, pi_id: Optional[str] = None) -> tuple[Optional[str], bool]:
     """
     Performs an id check in the `ids` table of the `public` schema. Verifying that the raspberry pi exists within the table.
 
     Args:
         pi_id (Optional[str]): The raspberry pi id to verify within the `ids` table.
+        debug (Optional[bool]): Toggle-able debug value for debug logging functionality.
 
     Returns:
         [str, bool]: [The respective pi id, Whether the raspberry pi exist within the `ids` table]
     """
-    log_dict = color_log()
+    log_dict = color_log(debug)
     load_dotenv()
 
     pi_name = pi_id or os.getenv("PI_NAME")
     ids_table_name = os.getenv("DB_IDS")
-    database_credentials = get_database_credentials()
+    database_credentials = get_database_credentials(None, debug)
 
     if database_credentials is not None and ids_table_name is not None:
         log_dict["info"](f"Performing id handshake with pi_id {pi_name}")

@@ -16,17 +16,19 @@ temperature_device_base_dir = "/sys/bus/w1/devices"
 """
 Represents the callback used for fetching the base directory of the temperature device.
 """
-def get_temperature_device_folder(base_dir: str, simulate: Optional[bool] = False) -> str:
+def get_temperature_device_folder(base_dir: str, simulate: Optional[bool] = False, debug: Optional[bool] = False) -> str:
     """
     Callback function that generates and returns the temperature device folder path.
 
     Args:
         base_dir (str): Represents the base directory to search for the temperature device within.
+        simulate (Optional[bool]): Represents the toggle-able boolean for simulating temperature data.
+        debug (Optional[bool]): Represent the toggle-able boolean for debug logging functionality.
 
     Returns:
         str: The path to the temperature device's folder.
     """
-    log_dict = color_log()
+    log_dict = color_log(debug)
 
     if simulate:
         return simulation_folder_name
@@ -48,17 +50,20 @@ def get_temperature_device_folder(base_dir: str, simulate: Optional[bool] = Fals
 """
 Represents the callback to fetch the file containing the temperature device.    
 """
-def get_temperature_device_file(folder_path: str, simulate: Optional[bool] = False, simulation_sensor_filename: Optional[str] = None) -> str:
+def get_temperature_device_file(folder_path: str, simulate: Optional[bool] = False, simulation_sensor_filename: Optional[str] = None, debug: Optional[bool] = False) -> str:
     """
     Fetches the singular file that contains the temperature device readings.
 
     Args:
         folder_path (str): Represents the path to the temperature device's folder.
+        simulate (Optional[bool]): Represents the toggle-able boolean value for simulating temperature data.
+        simulation_sensor_filename (Optional[str]): Represents the filename for the simulation temperature sensor.
+        debug (Optional[bool]): Represents the toggle-able boolean value for debug logging functionality.
 
     Returns:
         str: The found temperature device file.
     """
-    log_dict = color_log()
+    log_dict = color_log(debug)
 
     if simulate:
         return create_mock_temp_sensor(simulation_sensor_filename)
@@ -73,11 +78,11 @@ def get_temperature_device_file(folder_path: str, simulate: Optional[bool] = Fal
 """
 Represents the callback to fetch the path to the temperature device within the raspberry pi.
 """
-def get_temperature_device_path(simulate: Optional[bool] = False, simulation_sensor_filename: Optional[str] = None) -> str:
+def get_temperature_device_path(simulate: Optional[bool] = False, simulation_sensor_filename: Optional[str] = None, debug: Optional[bool] = False) -> str:
     """
     Returns the path to the temperature device within the raspberry pi.
 
     Returns:
         str: The path to the temperature device within the raspberry pi.
     """
-    return get_temperature_device_file(get_temperature_device_folder(temperature_device_base_dir, simulate), simulate, simulation_sensor_filename)
+    return get_temperature_device_file(get_temperature_device_folder(temperature_device_base_dir, simulate, debug), simulate, simulation_sensor_filename, debug)

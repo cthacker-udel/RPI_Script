@@ -6,10 +6,11 @@ from mysql.connector import connect
 from rpi_types.dto import TemperatureDTO
 from rpi_constants import get_database_credentials, color_log
 import os
+from typing import Optional
 
-def send_temperature_mysql(temperature_data: TemperatureDTO) -> bool:
-    log_dict = color_log()
-    database_credentials = get_database_credentials()
+def send_temperature_mysql(temperature_data: TemperatureDTO, debug: Optional[bool] = False) -> bool:
+    log_dict = color_log(debug)
+    database_credentials = get_database_credentials(None, debug)
     temperature_table = os.getenv("DB_TEMPERATURES")
 
     if database_credentials is not None and temperature_table is not None:

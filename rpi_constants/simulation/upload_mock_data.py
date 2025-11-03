@@ -4,18 +4,20 @@ Helper function for uploading mock temperature data to the mock temperature sens
 
 from rpi_constants.color_log import color_log
 import random
+from typing import Optional
 
-def upload_mock_data(file_path: str) -> list[str]:
+def upload_mock_data(file_path: str, debug: Optional[bool] = False) -> list[str]:
     """
     Creates + uploads mock temperature data to the mock temperature sensor file.
 
     Args:
         file_path (str): The path to the mock temperature sensor.
+        debug (Optional[bool]): The toggle-able boolean value for debug logging functionality.
 
     Returns:
         list[str]: The mock temperature data uploaded.
     """
-    log_dict = color_log()
+    log_dict = color_log(debug)
 
     log_dict['info']("Generating random temperature")
     random_celsius_temperature = round(random.uniform(10.0, 35.0))

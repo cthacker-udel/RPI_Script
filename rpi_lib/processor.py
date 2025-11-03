@@ -12,7 +12,7 @@ from rpi_constants.simulation import upload_mock_data
 import os
 
 
-def processor(pi_id: str, simulate: Optional[bool] = False, simulate_sensor_filename: Optional[str] = None) -> list[TemperatureDTO]:
+def processor(pi_id: str, simulate: Optional[bool] = False, simulate_sensor_filename: Optional[str] = None, debug: Optional[bool] = False) -> list[TemperatureDTO]:
     """
     Processes the readings from the raspberry pi and converts into DTO dataclasses.
 
@@ -24,20 +24,20 @@ def processor(pi_id: str, simulate: Optional[bool] = False, simulate_sensor_file
     Returns:
         list[TemperatureDTO]: The read temperature data prepared for propagation to the server.
     """
-    log_dict = color_log()
+    log_dict = color_log(debug)
 
     if not simulate and "PI_NAME" not in os.environ:
         log_dict["invalid"]("Environment variable PI_NAME does not exist. Please ensure PI has a display name.")
         exit(0)
     
     log_dict["info"]("Gathering path for temperature sensor")
-    temperature_device_path = get_temperature_device_path(simulate, simulate_sensor_filename)
+    temperature_device_path = get_temperature_device_path(simulate, simulate_sensor_filename, debug)
 
     if simulate:
-        upload_mock_data(temperature_device_path)
+        upload_mock_data(temperature_device_path, debug)
 
     log_dict["info"]("Reading raw temperature data")
-    found_temperatures = read_raw_temperature_data(temperature_device_path)
+    found_temperatures = read_raw_temperature_data(temperature_device_path, debug)
 
     if len(found_temperatures) == 0:
         log_dict["invalid"]("Could not read any temperatures, terminating")

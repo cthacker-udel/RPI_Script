@@ -13,17 +13,18 @@ DB_PASSWORD_ENVIRONMENT_KEY = "DB_PASSWORD"
 DB_HOST_ENVIRONMENT_KEY = "DB_HOST"
 DB_ENVIRONMENT_KEY = "DB"
 
-def get_database_credentials(schema_name: Optional[str] = None) -> Optional[DatabaseCredentials]:
+def get_database_credentials(schema_name: Optional[str] = None, debug: Optional[bool] = False) -> Optional[DatabaseCredentials]:
     """
     Fetches the database credentials from the environment variables stored in the raspberry pi.
 
     Arguments:
         schema_name (Optional[str]): Represents the optional schema name which allows for dynamic database entry.
+        debug (Optional[bool]): Toggle-able boolean value for debug logging functionality.
 
     Returns:
         Optional[DatabaseCredentials]: The stored database credentials within the raspberry pi device.
     """
-    log_dict = color_log()
+    log_dict = color_log(debug)
     load_dotenv()
 
     log_dict["info"]("Accessing stored database credentials")

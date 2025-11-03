@@ -6,6 +6,7 @@ import inspect
 import hashlib
 from typing import Callable, TypedDict
 from datetime import datetime
+from typing import Optional
 
 RESET_COLOR = "\033[0m"
 
@@ -19,7 +20,7 @@ def name_to_color(name: str) -> str:
     return f"\033[38;2;{r};{g};{b}m"
 
 
-def color_log() -> LogDictionary:
+def color_log(debug: Optional[bool] = False) -> LogDictionary:
     call_stack = None
     callee_name = "<unknown>"
     info_color = name_to_color("info")
@@ -36,8 +37,8 @@ def color_log() -> LogDictionary:
     timestamp = datetime.now().astimezone().strftime("%Y-%m-%d | %H:%M:%S")
     method_color = name_to_color(callee_name)
     log_dict: LogDictionary = {
-        "info": lambda message: print(f"{method_color}{callee_name}{RESET_COLOR}{info_color} [info] {message}{RESET_COLOR} {timestamp}"),
-        "invalid": lambda message: print(f"{method_color}{callee_name}{RESET_COLOR}{invalid_color} [invalid] {message}{RESET_COLOR} {timestamp}")
+        "info": lambda message: print(f"{method_color}{callee_name}{RESET_COLOR}{info_color} [info] {message}{RESET_COLOR} {timestamp}") if debug else None,
+        "invalid": lambda message: print(f"{method_color}{callee_name}{RESET_COLOR}{invalid_color} [invalid] {message}{RESET_COLOR} {timestamp}") if debug else None
     }
 
     return log_dict
