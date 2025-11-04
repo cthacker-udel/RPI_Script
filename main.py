@@ -32,6 +32,9 @@ simulate_sensor_filename: Optional[str] = cmd_line_arguments.simulate_sensor_fil
 debug: Optional[bool] = cmd_line_arguments.debug
 
 def main():
+    """
+    The main entry function, checks if the raspberry pi is registered within the database.
+    """
 
     [pi_id, does_pi_exist] = check_raspberry_pi_mysql(debug)
     while does_pi_exist and pi_id is not None:
