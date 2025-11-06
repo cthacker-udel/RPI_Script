@@ -10,7 +10,7 @@ COPY . /app
 RUN apt-get update && apt-get install -y --no-install-recommends build-essential curl git
 
 COPY requirements.txt .
-RUN pip install -v --no-cache-dir -r requirements.txt
+RUN pip3 install -v --no-cache-dir -r requirements.txt && pip3 install mysql-connector-python
 RUN apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
 
