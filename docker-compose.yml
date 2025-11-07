@@ -18,7 +18,7 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: rpi_db
-        entrypoint: ["cat database_schema.sql | mysql -u root -p root"]
+        entrypoint: ["cat", "database_schema.sql | mysql -u root -p root"]
         ports:
             - "3306:3306"
         volumes:
