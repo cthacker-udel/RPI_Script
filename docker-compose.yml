@@ -4,15 +4,22 @@ services:
         depends_on:
             - db
         environment:
-            MYSQL_HOST: db
-            MYSQL_USER: root
-            MYSQL_PASSWORD: root
-            MYSQL_DATABASE: testdb
+            PI_NAME: dev_pi
+            DB_IDS: ids
+            DB_TEMPERATURES: temperatures
+            DB_USERNAME: root
+            DB_PASSWORD: root
+            DB_HOST: db
+            DB_SCHEMA: rpi_db
         command: python main.py
+        restart: no
     db:
         image: mysql:8.0
         environment:
             MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: testdb
+            MYSQL_DATABASE: rpi_db
+        entrypoint: ["cat database_schema.sql | mysql -u root -p root"]
         ports:
             - "3306:3306"
+        volumes:
+            - ./database_schema.sql:/database_schema.sql

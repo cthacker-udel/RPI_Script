@@ -16,6 +16,3 @@ RUN rm -rf /var/lib/apt/lists/*
 
 COPY . .
 
-# Run the base CLI file.
-CMD ["python", "main.py"]
-
