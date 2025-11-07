@@ -14,12 +14,13 @@ services:
         command: python main.py
         restart: no
     db:
-        image: mysql:8.0
+        build:
+            context: .
+            dockerfile: mysql.Dockerfile
+        image: mysql:latest
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: rpi_db
-        entrypoint: ["cat", "database_schema.sql | mysql -u root -p root"]
+        restart: always
         ports:
             - "3306:3306"
-        volumes:
-            - ./database_schema.sql:/database_schema.sql
