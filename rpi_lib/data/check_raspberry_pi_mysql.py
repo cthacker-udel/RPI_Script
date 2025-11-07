@@ -3,10 +3,9 @@ Callback function that receives the raspberry pi id, and checks the mysql databa
 """
 
 from typing import Optional
-from rpi_constants import color_log, get_database_credentials, generate_pi_id
+from rpi_constants import color_log, get_database_credentials, generate_pi_id, retry_connection_exp
 import os
 from dotenv import load_dotenv
-from mysql.connector import connect
 
 def check_raspberry_pi_mysql(debug: Optional[bool] = False, pi_id: Optional[str] = None) -> tuple[Optional[str], bool]:
     """
@@ -28,7 +27,7 @@ def check_raspberry_pi_mysql(debug: Optional[bool] = False, pi_id: Optional[str]
 
     if database_credentials is not None and ids_table_name is not None:
         log_dict["info"](f"Performing id handshake with pi_id {pi_name}")
-        database_connection = connect(host=database_credentials.host, user=database_credentials.user, password=database_credentials.password, database=database_credentials.schema)
+        database_connection = retry_connection_exp(database_credentials)
         table_cursor = database_connection.cursor(dictionary=True)
         table_cursor.execute(f"SELECT * FROM `{ids_table_name}` WHERE name = %s", (pi_name,))
         found_pi = table_cursor.fetchone()

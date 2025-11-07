@@ -9,7 +9,7 @@ services:
             DB_TEMPERATURES: temperatures
             DB_USERNAME: root
             DB_PASSWORD: root
-            DB_HOST: localhost
+            DB_HOST: db
             DB_SCHEMA: rpi_db
         command: python main.py
         restart: no
