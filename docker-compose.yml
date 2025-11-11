@@ -21,18 +21,5 @@ services:
         restart: always
         ports:
             - "3306:3306"
-        healthcheck:
-            test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-            interval: 5s
-            timeout: 5s
-            retries: 10
-            start_period: 30s
-    db-init:
-        image: mysql:latest
-        depends_on:
-            db:
-                condition: service_healthy
         volumes:
-            - ./database_schema.sql:/schema.sql
-        entrypoint:
-            ["bash", "-c", "mysql -h db -u root -proot rpi_db < /schema.sql"]
+            - ./database_schema.sql:/docker-entrypoint-initdb.d/schema.sql
